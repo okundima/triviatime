@@ -1,0 +1,137 @@
+﻿<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<title>QUIZ GAME</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" >
+    <link href="css/1/bootstrap.min.css" rel="stylesheet">
+    <link href="css/landing-page.css" rel="stylesheet">
+    <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<script src="js/jquery-1.11.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+	<script>
+	setTimeout(function(){
+	$("#splash2").delay("fast").slideUp("fast");
+	$("#splash3").delay("fast").slideToggle("fast");
+	});
+	</script>
+
+</head>
+<body>
+	<div id="splash" class="text-center center-block" style="margin-bottom:10px;">
+		<img class="text-center" src="images/title.png" style="width:95%;" > 
+	</div>
+	<div id="splash2" class="text-center center-block" style="max-width:640px;">
+        <h1><img id="imgloader" src="images/ajax-loader.gif" style="width:32px;opacity:0.5;vertical-align:middle;-webkit-border-radius:40px;border-radius: 40px;"></h1>
+		<br>
+	</div>
+		
+	<div class="container">
+		<div id="splash3" style="display:none">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<span class="network-name">
+						<center><div id="popuptext"></div></center>
+					</span>
+				</div>
+				<div class="panel-body">
+					<form id="regForm" action="javascript: verifyRegfirst()">
+						<div class="input-group"  style="margin-bottom:2px;">
+								<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+							<span class="network-name">
+								<input type="text" class="form-control" name="username" id="username" placeholder="Username" required/>
+							</span>
+						</div>
+						<div class="input-group" style="margin-bottom:2px;">
+								<span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+							<span class="network-name">
+								<input type="email" class="form-control" name="email" id="uemail" placeholder="example@yahoo.com" required/>
+							</span>
+						</div>
+						<div class="input-group" style="margin-bottom:2px;">
+								<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+							<span class="network-name">
+								<input type="password" class="form-control" name="password" id="upassword" placeholder="Password" required/>
+							</span>
+						</div>
+						<div class="input-group" style="margin-bottom:10px;">
+								<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+							<span class="network-name">
+								<input type="password" class="form-control" name="ucpassword" id="ucpassword" placeholder="Confirm Password" required/>
+							</span>
+						</div>
+							<button type="submit" id="registerUser" class="btn btn-info btn-block btn-lg"><span class="network-name"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;S&nbsp;u&nbsp;b&nbsp;m&nbsp;i&nbsp;t</span></button>
+							<a href="main.html" class="btn btn-info btn-block btn-lg"><span class="network-name"><i class="glyphicon glyphicon-chevron-left"></i>&nbsp;&nbsp;B&nbsp;a&nbsp;c&nbsp;k</span></a>
+					</form>		
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script type="text/javascript">
+
+	function verifyRegfirst(){
+	var rform = $("#regForm");
+		if($( "#username" ).val() == "" || $( "#upassword" ).val() == "" || $( "#uemail" ).val() == "" || $( "#ucpassword" ).val() == "")	//do when fields are nothing
+		{
+			$("#popuptext").html("<b>Please Complete the Form</b>");
+			
+		}else if($("#upassword").val() != $("#ucpassword").val()){
+		
+			$("#popuptext").html("<b>Password did not match</b>");
+			
+		}else{
+			$.getJSON("quiz_online_files/register_check.php?callback=?",rform.serialize(), function(data)	//check email
+			{
+			
+				if (data.eexists == "exists")		//check if email exists
+				{
+					$("#popuptext").html("<b>The email address is already use.</b>");
+				}
+				else if(data.uexists == "exists")
+				{									//check if username already taken
+					
+					$("#popuptext").html("<b>This username is already in use.</b>");
+
+				}
+				else
+				{
+					$.getJSON("quiz_online_files/register_user.php?callback=?",rform.serialize(), function(data)
+					{
+						$("#username").val("");
+						$("#uemail").val("");
+						$("#upassword").val("");
+						$("#ucpassword").val("");
+						
+						$("#popuptext").html("<b>Registration Complete!</b>");
+						//check if login
+						var a = window.localStorage.getItem("username");
+						if(a == "null" || a == "" || a == "undefined"){
+							location.href = "login.html";		//set localstorage to username then navigate to index
+							
+						}else{
+
+							alert("2"); // alert for not connected status
+						}
+						
+					}).fail(function(){
+					
+						$("#popuptext").html("<b>Registration Failed!</b>"); // fail
+					});
+
+				}
+			}).fail(function(data){
+				
+				$("#popuptext").html("<b>Problem with your login, Please check internet connection or try again later.</b>");
+				// no internet
+				
+			});
+		}
+	}
+		
+	</script>
+
+</body>
+
+</html>

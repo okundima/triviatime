@@ -1,0 +1,160 @@
+﻿<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<title>QUIZ GAME</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" >
+    <link href="css/1/bootstrap.min.css" rel="stylesheet">
+    <link href="css/landing-page.css" rel="stylesheet">
+    <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<script src="js/jquery-1.11.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+	<script>
+	setTimeout(function(){
+	
+	$("#hide").show();
+	
+	});
+	</script>
+</head>
+<body>
+	
+<div id="splash" class="text-center center-block" style="margin-bottom:10px;">
+		<img class="text-center" src="images/title.png" style="width:95%;"> 
+	
+	</div>
+		
+		<div>			
+						<div id="splash">	
+							<div class="container">
+							<div class="panel panel-default">
+								<div class="panel-body">
+								<div id="hide" style="display:none">
+								
+								<button type="submit" style="margin-bottom:5px;" class="btn btn-info btn-block btn-lg" name="Button1" id="btn-upload" ><i class="glyphicon glyphicon-save"></i><span class="network-name">&nbsp;&nbsp;S&nbsp;a&nbsp;v&nbsp;e&nbsp;&nbsp;&nbsp; S&nbsp;c&nbsp;o&nbsp;r&nbsp;e</span></button>
+								
+								</div>
+								<div id="hide1" style="display:none">
+								<center>
+								<p style="font-size:20px" id="login_first"><span class="network-name">You Need to Login</span><p>
+								</center>
+								</div>
+								<div id="hide2" style="display:none">
+								
+								<a href="login.html" style="margin-bottom:5px;" class="btn btn-info btn-block btn-lg" id="btn-login"><i class="glyphicon glyphicon-user"></i><span class="network-name">&nbsp;&nbsp;L&nbsp;o&nbsp;g&nbsp;i&nbsp;n</span></a>
+								</div>
+							
+								<span class="network-name">
+								<center>
+								<div style="font-size:20px" id="uploaded">
+								<b style="font-size:20px" id="game_over_page_msg"><span class="network-name">Your Score</span><b><br />
+								
+								<b style="font-size:50px"id="myscore"><span class="network-name">0</span><b>
+								</center>
+								
+								</span>
+								
+								<button type="submit" class="btn btn-info btn-block btn-lg" name="" id="btn-again"><i class="glyphicon glyphicon-play"></i><span class="network-name">&nbsp;&nbsp;T&nbsp;r&nbsp;y&nbsp;&nbsp;&nbsp; A&nbsp;g&nbsp;a&nbsp;i&nbsp;n</span></button>
+								
+								<button type="submit" class="btn btn-info btn-block btn-lg" name="" id="btn-main"><i class="glyphicon glyphicon-home"></i><span class="network-name">&nbsp;&nbsp;M&nbsp;a&nbsp;i&nbsp;n&nbsp; &nbsp;&nbsp;M&nbsp;e&nbsp;n&nbsp;u</span></button>
+								</span>
+								</div>
+								</div>
+								</div>
+							</div>
+							</div>
+		</div>	
+		
+		
+		
+		
+		
+			
+
+				
+			
+	
+		</div>
+
+
+
+	</div>
+
+	
+	
+</body>
+
+<script>
+
+$(document).ready(function(){
+				//fetch in localstorage the last score by the player
+
+					var a = window.localStorage.getItem("user_id");
+					var b = window.localStorage.getItem("username");
+					var c = window.localStorage.getItem("lastscore");
+					document.getElementById("myscore").innerHTML=c;
+
+					$("#btn-upload").click(function(){
+			
+
+		
+		
+		
+					if(a == null || a == ""){	//if the value of user_id is null or empty
+						$("#hide2").show();
+						$("#game_over_page_msg").html("");	
+						$("#hide1").show();
+						$("#btn-upload").hide();
+			
+					}else if(a == "no internet connection"){
+						
+						$("#game_over_page_msg").html("No internet connection");
+					}else {
+						//check internet
+						$.ajax({
+							url: "quiz_online_files/post_score_online.php",
+							type: "POST",
+							data: {"user_id":a,"user_username":b,"score":c},
+							success: function(data){
+								if(data=="not"){
+									//will message
+									$("#game_over_page_msg").html("Post Score Failed");
+									$("#txtReady").html("There was a problem uploading your score. Please try again.");
+									
+								}else if(data=="success"){
+									//will message
+									$("#game_over_page_msg").html("Your Score was posted online");
+									$('#uploaded').html("uploaded");
+
+									$("#txtReady").html("Your Score was posted online!");
+								
+								}
+								else{	//msgs and hide
+									$('#hide').hide();
+									$('#uploaded').html("<center><b>Score Uploaded</b></center>");
+
+									
+								}
+							}
+				
+						});
+					}
+				});
+	
+	
+							//function of buttons
+							$("#btn-again").click(function(){
+							location.href = "game.html";
+						});
+							$("#btn-main").click(function(){
+							location.href = "main.html";
+						});
+							});
+							$("#ilogin").click(function(){
+							location.href = "login.html";
+				});
+	
+		</script>
+		
+</html>

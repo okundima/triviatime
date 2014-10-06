@@ -1,0 +1,84 @@
+﻿<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<title>QUIZ GAME</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" >
+    <link href="css/1/bootstrap.min.css" rel="stylesheet">
+    <link href="css/landing-page.css" rel="stylesheet">
+    <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<script src="js/jquery-1.11.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+	<script>
+	setTimeout(function(){
+	$("#splash2").delay("fast").slideUp("fast");
+	$("#splash-table").delay("fast").slideToggle(1000);
+	$("#splash-back").delay(1500).slideToggle("fast");
+	});
+	</script>
+
+</head>
+<body onload="getLeaderboard()">
+	<div id="splash" class="text-center center-block" >
+		<img class="text-center" src="images/title.png" style="width:95%;"> 
+		
+	</div>
+	<br>
+	<div id="splash2" class="text-center center-block" style="max-width:640px;">
+        <h1><img id="imgloader" src="images/ajax-loader.gif" style="width:32px;opacity:0.5;vertical-align:middle;-webkit-border-radius:40px;border-radius: 40px;"></h1>
+		<br>
+	</div>
+		<div class="container" id="splash-table" style="display:none">
+			<div class="panel panel-default">
+			<table id="leaderboard"  class="table table-hover table-striped">
+				<head>
+					<tr>
+						<th><span class="network-name"><b>RANK<b></span></th>
+						<th><span class="network-name"><b>USERNAME<b></span></th>
+						<th><span class="network-name"><b>SCORE<b></span></th>
+					</tr>
+				</head>
+			</table>
+			<br>
+			
+		</div>
+		<div id="splash-back" style="display:none;">
+			<a href="main.html" class="btn btn-info btn-block btn-lg"><span class="network-name"><i class="glyphicon glyphicon-chevron-left"></i>&nbsp;&nbsp;B&nbsp;a&nbsp;c&nbsp;k</span></a>
+		<br>
+		
+		</div>
+	</div>		
+</body>
+
+<script>
+
+		
+		function getLeaderboard(){
+		
+		var rank = 0;
+		$(".leaderboard").remove();
+		$.ajax({
+			url: "quiz_online_files/display_leaderboard.php",
+			type: "GET",
+			dataType: "json",
+			success: function(data){
+				
+				for(var i=0;i<data.length;i++){			//fetch some high scorers
+					rank++
+					$('#leaderboard').append(
+					'<tr> <class="leaderboardTable"><td><span class="network-name">'+ rank + '</span></td><td><span class="network-name">'+data[i].user_username+ '</span></td><td><span class="network-name">'+data[i].score_score+'</span></td> </tr>'
+					
+					);
+				}
+			},
+			error: function(){
+				//do something if error
+			}
+			
+		});
+	}
+	
+	
+</script>
+</html>
